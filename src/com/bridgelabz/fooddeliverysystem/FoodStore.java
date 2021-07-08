@@ -4,19 +4,27 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class FoodStore {
+    private static FoodStore instance;
     Set<FoodItem> foodList = new HashSet<>();
-    Scanner scanner = new Scanner(System.in);
+    OrderStore orderStore = OrderStore.getInstance();
+    Scanner input = new Scanner(System.in);
+
+    private FoodStore() {
+    }
+
+    public static synchronized FoodStore getInstance() {
+        if(instance == null)
+            instance = new FoodStore();
+
+        return instance;
+    }
 
     public void add(FoodItem foodItem) {
         foodList.add(foodItem);
     }
 
-    public void remove(FoodItem foodItem) {
-        foodList.remove(foodItem);
-    }
-
     public void display() {
-        Stream.of(foodList).forEach( System.out::println);
+        Stream.of(foodList).forEach(System.out::println);
     }
 
     public void displayJuices() {
@@ -40,33 +48,40 @@ public class FoodStore {
     }
 
     public void placeOrder() {
-        Order order = new Order();
-        boolean flag = true;
-        while(flag){
-            System.out.println("press 1 to place order\nPress 2 to exit");
-            int ch = scanner.nextInt();
-            if(ch == 1){
-                System.out.println("Enter a food name: ");
-                String foodName = scanner.next();
-                System.out.println("Enter the food quantity: ");
-                int foodQuantity = scanner.nextInt();
-                System.out.println("Enter your delivery address");
-                String address = scanner.next();
-                order.setDeliveryAddress(address);
-                System.out.println("Enter your Order Id");
-                int orderId = scanner.nextInt();
-                order.setOrderId(orderId);
-                Iterator iterator = foodList.iterator();
-                while (iterator.hasNext()){
-                    FoodItem foodItem = (FoodItem) iterator.next();
-                    if (foodItem.foodname.equals(foodName)){
-                        order.orderList.put(foodItem, foodQuantity);
-                    }
-                }
-                System.out.println("Current order : " + order);
-            } else {
-                flag = false;
+
+        Order orderObj = new Order();
+
+        System.out.print("\nPlease enter orderID : ");
+        orderObj.setOrderID(input.nextInt());
+
+        System.out.print("Please enter delivery address : ");
+        orderObj.setDeliveryAddress(input.next());
+
+        while(true) {
+            System.out.println("\nPress 1 to place order");
+            System.out.println("Press 2 to exit");
+            int choice = input.nextInt();
+
+            if(choice == 1) {
+
+                System.out.print("\nPlease select the menu item : ");
+                String name = input.next().concat(input.nextLine());
+
+
+                System.out.print("Please enter food quantity : ");
+                int quantity = input.nextInt();
+
+                foodList.stream().filter(x -> x.foodname.equals(name)).
+                        forEach(foodItem -> {
+                            orderObj.hMap.put(foodItem , quantity);
+                        });
+                orderObj.setTotalPrice();
             }
+            else
+                break;
         }
+
+        orderStore.add(orderObj);
+        System.out.println("\nOrder placed successfully!");
     }
 }

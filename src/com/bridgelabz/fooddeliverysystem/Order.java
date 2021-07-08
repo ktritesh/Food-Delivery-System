@@ -4,40 +4,23 @@ import java.util.HashMap;
 
 public class Order {
 
-    enum OrderStatus{
-        DELIVERED, PENDING;
+    enum ORDERSTATUS {
+        DELIVERED, PENDING
     }
 
-    HashMap<FoodItem, Integer> orderList = new HashMap<>();
+    HashMap<FoodItem, Integer> hMap = new HashMap<>();
+    private Integer orderID;
     private Integer totalPrice;
     private String deliveryAddress;
-    private Integer orderId;
+    private ORDERSTATUS orderstatus = ORDERSTATUS.PENDING;
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderList=" + orderList +
-                ", totalPrice=" + totalPrice +
-                ", deliveryAddress='" + deliveryAddress + '\'' +
-                ", orderId=" + orderId +
-                ", orderStatus=" + orderStatus +
-                '}';
-    }
-
-    private OrderStatus orderStatus = OrderStatus.PENDING;
-
-    public int calculateTotalPrice(){
-        int totalPrice = orderList.entrySet().stream().map(item -> item.getKey().price * item.getValue())
+    public void setTotalPrice() {
+        totalPrice = hMap.entrySet().stream().map(item -> item.getKey().price * item.getValue())
                 .reduce(0, (total, item) -> total + item);
-        return totalPrice;
     }
 
-    public Integer getTotalPrice() {
+    public int getTotalPrice() {
         return totalPrice;
-    }
-
-    public void setTotalPrice(Integer totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public String getDeliveryAddress() {
@@ -48,11 +31,21 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public Integer getOrderID() {
+        return orderID;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setOrderID(Integer orderID) {
+        this.orderID = orderID;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "OrderID=" + orderID +
+                ", TotalPrice=" + totalPrice +
+                ", DeliveryAddress='" + deliveryAddress + '\'' +
+                ", Orderstatus=" + orderstatus +
+                '}';
     }
 }

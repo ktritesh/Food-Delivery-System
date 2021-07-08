@@ -7,29 +7,34 @@ import java.util.stream.Stream;
 
 public class OrderStore {
     private static OrderStore instance;
-    Scanner scanner = new Scanner(System.in);
     Set<Order> orderSet = new HashSet<>();
+    Scanner input = new Scanner(System.in);
 
-    private OrderStore(){
-
+    //Private is for Singelton class so that we are not able to create the object
+    private OrderStore() {
     }
 
-    synchronized static OrderStore getInstance(){
-        if(instance == null){
+    //Since we cannot create a object, so declare as static
+    public static synchronized OrderStore getInstance() {
+        if(instance == null)
             instance = new OrderStore();
-        }
+
         return instance;
     }
 
-    public void addOrder(Order order){
+    public void add(Order order) {
         orderSet.add(order);
     }
 
-    public void viewOrder(Order order){
-        orderSet.add(order);
-    }
-
-    public void viewOrder(){
+    public void viewAllOrder() {
         Stream.of(orderSet).forEach(System.out::println);
+    }
+
+    public void viewParticularOrder() {
+        System.out.print("Please enter order id : ");
+        int orderID = input.nextInt();
+
+        orderSet.stream().filter(x -> x.getOrderID() == orderID).
+                forEach(System.out::println);
     }
 }

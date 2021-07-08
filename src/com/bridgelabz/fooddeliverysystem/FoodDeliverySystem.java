@@ -1,22 +1,23 @@
 package com.bridgelabz.fooddeliverysystem;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class FoodDeliverySystem {
     Scanner input = new Scanner(System.in);
-    FoodStore foodStore = new FoodStore();
+    FoodStore foodStore = FoodStore.getInstance();
 
     public void userMenu() {
         while(true) {
-            System.out.println("1. Add Food Items");
-            System.out.println("2. Display all Food Items");
-            System.out.println("3. Display STARTER");
-            System.out.println("4. Display MAIN_COURSE");
-            System.out.println("5. Display JUICES");
-            System.out.println("6. Display DESSERT");
-            System.out.println("7. Place Order");
-            System.out.println("8. Quit");
+            System.out.println("\n 1. Add Food Items");
+            System.out.println(" 2. Display All Food Items");
+            System.out.println(" 3. Display STARTER");
+            System.out.println(" 4. Display MAIN_COURSE");
+            System.out.println(" 5. Display JUICES");
+            System.out.println(" 6. Display DESSERT");
+            System.out.println(" 7. Place the Order");
+            System.out.println(" 8. Display a particular order");
+            System.out.println(" 9. Display all orders");
+            System.out.println(" 10. Quit");
 
             int option = input.nextInt();
 
@@ -38,7 +39,7 @@ public class FoodDeliverySystem {
                     foodStore.displayMainCourse();
                     break;
                 case 5:
-                    System.out.println("\n" + "Printing the Juices: ");
+                    System.out.println("\n" + "Printing the Juice: ");
                     foodStore.displayJuices();
                     break;
                 case 6:
@@ -46,24 +47,32 @@ public class FoodDeliverySystem {
                     foodStore.displayDessert();
                     break;
                 case 7:
-                    System.out.println("\n" + "Place the order: ");
+                    System.out.println("\n" + "Place the Order ");
                     foodStore.placeOrder();
                     break;
                 case 8:
+                    System.out.println("\n" + "Displaying a particular order ");
+                    OrderStore.getInstance().viewParticularOrder();
+                    break;
+                case 9:
+                    System.out.println("\n" + "Displaying all orders ");
+                    OrderStore.getInstance().viewAllOrder();
+                    break;
+                case 10:
                     return;
             }
         }
     }
+
     public void addfoodDetails(){
         while(true) {
             FoodItem foodItem = new FoodItem();
-            FoodDeliverySystem foodDeliverySystem = new FoodDeliverySystem();
 
             System.out.print("Enter the food Name: ");
             foodItem.foodname = input.next();
             foodItem.foodname += input.nextLine();
 
-            foodItem.price = foodDeliverySystem.enterPrice();
+            foodItem.price = inputPrice();
 
             System.out.println("Enter the food taste");
             System.out.println("Press 1 - Salty");
@@ -85,7 +94,7 @@ public class FoodDeliverySystem {
             System.out.println("Press 1 - STARTER");
             System.out.println("Press 2 - Main Course");
             System.out.println("Press 3 - Desert");
-            System.out.println("Press 4 - Juices ");
+            System.out.println("Press 4 - Juice ");
             int foodCat = input.nextInt();
 
             if(foodCat == 1)
@@ -96,28 +105,33 @@ public class FoodDeliverySystem {
                 foodItem.foodCategory = FoodItem.Category.DESSERT;
             else if(foodCat == 4)
                 foodItem.foodCategory = FoodItem.Category.JUICES;
+
             foodStore.add(foodItem);
             break;
         }
     }
 
-    public int enterPrice(){
+    public int inputPrice() {
         int price = 0;
-        do {
+        boolean check = true;
+        while (check) {
             try {
                 System.out.print("Enter the food price: ");
                 price = input.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Enter the valid price: ");
+                check = false;
+            } catch (Exception e) {
+                System.out.println("\nPlease enter a proper value\n");
+                check = true;
             }
             input.nextLine();
-        }while (price <= 0);
+        }
         return price;
     }
 
     public static void main(String[] args) {
         FoodDeliverySystem foodDeliverySystem = new FoodDeliverySystem();
-        System.out.println("Welcome to Food Delivery System" + "\n");
+
+        System.out.println("\nWelcome to Food Delivery System");
         foodDeliverySystem.userMenu();
     }
 }
