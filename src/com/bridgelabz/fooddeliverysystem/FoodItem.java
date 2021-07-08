@@ -1,25 +1,24 @@
 package com.bridgelabz.fooddeliverysystem;
 
-public class FoodItems {
+public class FoodItem {
     enum Taste {
-        SALTY, SWEET, SPICY
+        SALTY, SWEET, SPICY, SOUR
     }
-
     enum Category {
-        STARTER, MAIN_COURSE, DESERT, SNACK
+        STARTER, MAIN_COURSE, DESSERT, JUICES
     }
 
-    String name;
-    int Price;
+    String foodname;
+    int price;
     Taste taste;
     int quantity;
     Category foodCategory;
 
     @Override
     public String toString() {
-        return "FoodItems{" +
-                "name='" + name + '\'' +
-                ", Price=" + Price +
+        return "FoodItem{" +
+                "foodname='" + foodname + '\'' +
+                ", price=" + price +
                 ", taste=" + taste +
                 ", quantity=" + quantity +
                 ", foodCategory=" + foodCategory +
